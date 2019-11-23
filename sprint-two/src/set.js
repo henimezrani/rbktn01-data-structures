@@ -14,6 +14,7 @@ setPrototype.add = function(item) {
 setPrototype.contains = function(item) {
 	if (typeof item === "string" || typeof item === "number")
 		return this._storage[item] !== undefined;
+	return false;
 };
 
 setPrototype.remove = function(item) {

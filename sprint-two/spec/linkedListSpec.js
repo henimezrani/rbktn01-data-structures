@@ -52,4 +52,14 @@ describe('linkedList', function() {
   });
 
   // add more tests here to test the functionality of linkedList
+
+  it('should add multiple nodes and reassigns the head to second node after node removal', function() {
+    linkedList.addToTail(4);
+    linkedList.addToTail(5);
+    linkedList.addToTail(4);
+    linkedList.addToTail(4);
+    linkedList.removeHead();
+    expect(linkedList.contains(4)).to.equal(true);
+    expect(linkedList.removeHead()).to.equal(5);
+  });
 });

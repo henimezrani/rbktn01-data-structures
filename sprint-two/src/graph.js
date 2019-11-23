@@ -9,20 +9,11 @@ var Graph = function(value) {
 Graph.prototype.addNode = function(node) {
 
 	if (this.graph[node] !== undefined){
-		console.log('entering this')
 		this.graph[node][node] = 1;
 	} else {
-		this.graph[node] = Array.from(Array(node + 1), function(){
-			return 0;
-		});
-		for (var i = 0 ; i < node ; i++) {
-			if(this.graph[i] === undefined){
-				this.graph[i] = Array.from(Array(node + 1), function(){
-					return 0;
-				});
-			}
-			this.graph[i][node] = 0;
-		}
+		var tmpLength = this.graph.length;
+
+		this.graph[node] = [];
 		this.graph[node][node] = 1;
 	}
 };
@@ -34,11 +25,12 @@ Graph.prototype.contains = function(node) {
 
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
+	this.graph[node][node] = undefined;
 	for (var i = 0; i < this.graph.length; i++) {
-		this.graph[i][node] = 0;
-	}
-	for (var i = 0; i < this.graph.length; i++) {
-		this.graph[node][i] = 0;
+		if (this.graph[i]){
+			this.graph[i][node] = undefined;
+			this.graph[node][i] = undefined;
+		}
 	}
 };
 
@@ -49,14 +41,29 @@ Graph.prototype.hasEdge = function(fromNode, toNode) {
 
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode) {
-	this.graph[fromNode][toNode] = 1;
-	this.graph[toNode][fromNode] = 1;
+		if(this.graph[toNode] === undefined || this.graph[fromNode] === undefined){
+		this.graph[fromNode] = [];
+		this.graph[fromNode][toNode] = 1;
+		this.graph[toNode] = [];
+		this.graph[toNode][fromNode] = 1;
+	}else{
+		this.graph[fromNode][toNode] = 1;
+		this.graph[toNode][fromNode] = 1;
+	}
 };
 
 // Remove an edge between any two specified (by value) nodes.
 Graph.prototype.removeEdge = function(fromNode, toNode) {
-	this.graph[fromNode][toNode] = 0;
-	this.graph[toNode][fromNode] = 0;
+	if(this.graph[toNode] === undefined || this.graph[fromNode] === undefined){
+		this.graph[fromNode] = [];
+		this.graph[fromNode][toNode] = undefined;
+		this.graph[toNode] = [];
+		this.graph[toNode][fromNode] = undefined;
+	}else{
+		this.graph[fromNode][toNode] = undefined;
+		this.graph[toNode][fromNode] = undefined;
+	}
+
 };
 
 // Pass in a callback which will be executed on each node of the graph.
