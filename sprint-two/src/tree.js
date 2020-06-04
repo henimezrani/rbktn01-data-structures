@@ -42,3 +42,22 @@ treeMethods.contains = function (target) {
   }
   return false;
 };
+
+treeMethods.traverseDF = function (cb) {
+  cb(this.value);
+  for (var i = 0; i < this.children.length; i++) {
+    this.children[i].traverseDF(cb);
+  }
+};
+
+treeMethods.traverseBF = function (cb) {
+  var q = new Queue();
+  var current;
+  q.enqueue(this);
+  while ((current = q.dequeue())) {
+    cb(current.value);
+    current.children.forEach((child) => {
+      q.enqueue(child);
+    });
+  }
+};

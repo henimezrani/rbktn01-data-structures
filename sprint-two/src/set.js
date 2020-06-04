@@ -7,11 +7,13 @@ var Set = function () {
 var setPrototype = {};
 
 setPrototype.add = function (item) {
-  this._storage[item] = true;
+  if ((typeof item === "string" || typeof item === "number") && this._storage[item] === undefined) {
+    this._storage[item] = true;
+  }
 };
 
 setPrototype.contains = function (item) {
-  return this._storage[item];
+  return (typeof item === "string" || typeof item === "number") && !!this._storage[item];
 };
 
 setPrototype.remove = function (item) {
