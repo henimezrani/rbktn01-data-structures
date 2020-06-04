@@ -1,8 +1,7 @@
-var Tree = function(value) {
+var Tree = function (value) {
   var newTree = {};
   newTree.value = value;
 
-  // your code here
   newTree.children = [];
   _.extend(newTree, treeMethods);
 
@@ -11,28 +10,54 @@ var Tree = function(value) {
 
 var treeMethods = {};
 
-treeMethods.addChild = function(value) {
-	this.children.push(Tree(value));
+treeMethods.addChild = function (value) {
+  var node = new Tree(value);
+  this.children.push(node);
 };
 
-treeMethods.contains = function(target, boo) {
-	var boo = boo || false;
+// Old version
+treeMethods.containsOld = function (target, boo) {
+  var boo = boo || false;
 
-	if (this.value === target) {
-		return true;
-	}
+  if (this.value === target) {
+    return true;
+  }
 
-	if(this.children.length > 0){
-		for (var i = 0 ; i < this.children.length ; i++) {
-			boo = this.children[i].contains(target, boo);
-		}
-	}
+  for (var i = 0; i < this.children.length; i++) {
+    boo = this.children[i].contains(target, boo);
+  }
 
-	return boo;
+  return boo;
 };
 
+// Optimized version
+treeMethods.contains = function (target) {
+  if (this.value === target) {
+    return true;
+  }
+  for (var i = 0; i < this.children.length; i++) {
+    if (this.children[i].contains(target)) {
+      return true;
+    }
+  }
+  return false;
+};
 
+treeMethods.traverseDF = function (cb) {
+  cb(this.value);
+  for (var i = 0; i < this.children.length; i++) {
+    this.children[i].traverseDF(cb);
+  }
+};
 
-/*
- * Complexity: What is the time complexity of the above functions?
- */
+treeMethods.traverseBF = function (cb) {
+  var q = new Queue();
+  var current;
+  q.enqueue(this);
+  while ((current = q.dequeue())) {
+    cb(current.value);
+    current.children.forEach((child) => {
+      q.enqueue(child);
+    });
+  }
+};
