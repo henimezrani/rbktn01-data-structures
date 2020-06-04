@@ -11,10 +11,8 @@ var Stack = function() {
   };
 
   someInstance.pop = function() {
-    var index = Object.keys(storage).length;       
-    var tmp = storage[index-1];
-    delete storage[index-1];
-
+    var tmp = storage[Object.keys(storage).length - 1];
+    delete storage[Object.keys(storage).length - 1];
     return tmp;
   };
 
